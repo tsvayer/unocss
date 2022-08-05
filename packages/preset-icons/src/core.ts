@@ -57,7 +57,7 @@ export function createPresetIcons(lookupIconLoader: (options: IconsOptions) => P
       options,
       layers: { icons: -30 },
       rules: [[
-        /^([a-z0-9:-]+)(?:\?(mask|bg|auto))?$/,
+        /^([a-z0-9:-]+)(?:\?(mask|bg|fill|auto))?$/,
         async ([full, body, _mode = mode]) => {
           let collection = ''
           let name = ''
@@ -96,6 +96,18 @@ export function createPresetIcons(lookupIconLoader: (options: IconsOptions) => P
           // Thanks to https://codepen.io/noahblon/post/coloring-svgs-in-css-background-images
             return {
               '--un-icon': url,
+              'mask': 'var(--un-icon) no-repeat',
+              'mask-size': '100% 100%',
+              '-webkit-mask': 'var(--un-icon) no-repeat',
+              '-webkit-mask-size': '100% 100%',
+              'background-color': 'currentColor',
+              ...usedProps,
+            }
+          }
+          else if (_mode === 'fill') {
+            const transformedUrl = url.replace('fill=\'none\'', 'fill=\'currentColor\'')
+            return {
+              '--un-icon': transformedUrl,
               'mask': 'var(--un-icon) no-repeat',
               'mask-size': '100% 100%',
               '-webkit-mask': 'var(--un-icon) no-repeat',
